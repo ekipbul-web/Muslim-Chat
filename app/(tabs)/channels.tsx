@@ -29,25 +29,25 @@ export default function Channels() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-white dark:bg-slate-900" edges={["top"]}>
-      <View className="px-6 pt-6 pb-4 flex-row justify-between items-center"><Text className="text-3xl font-extrabold text-slate-900 dark:text-white">Kanallar</Text>
+    <SafeAreaView className="flex-1 bg-slate-50" edges={["top"]}>
+      <View className="px-6 pt-6 pb-4 flex-row justify-between items-center bg-white border-b border-slate-100"><Text className="text-3xl font-extrabold text-slate-900 tracking-tight">Kanallar</Text>
         {isAssistant && <Pressable onPress={() => setModal(true)} className="w-12 h-12 bg-primary-50 rounded-full items-center justify-center"><Plus color="#0F766E" size={24} /></Pressable>}
       </View>
       <FlatList data={channels} keyExtractor={(c) => c.id} contentContainerStyle={{ padding: 16 }}
         ListEmptyComponent={<Text className="text-center text-slate-500 mt-10">Henüz kanal yok.</Text>}
         renderItem={({ item }) => (
-          <View className="bg-slate-50 dark:bg-slate-800 p-4 rounded-3xl mb-3 flex-row items-center shadow-sm">
-            <View className="w-12 h-12 bg-primary-600 rounded-2xl items-center justify-center mr-4"><Megaphone color="#fff" size={24} /></View>
-            <View className="flex-1"><Text className="font-bold text-lg text-slate-900 dark:text-white">{item.name}</Text><Text className="text-slate-500 text-sm">{item.description}</Text></View>
+          <View className="bg-white p-5 rounded-3xl mb-3 flex-row items-center shadow-sm shadow-slate-200/50">
+            <View className="w-14 h-14 bg-primary-600 rounded-2xl items-center justify-center mr-4 shadow-md shadow-primary-200"><Megaphone color="#fff" size={28} /></View>
+            <View className="flex-1"><Text className="font-bold text-lg text-slate-900">{item.name}</Text><Text className="text-slate-500 text-sm mt-1">{item.description}</Text></View>
           </View>
         )} />
-      <Modal visible={modal} animationType="slide" transparent> 
-        <View className="flex-1 justify-center bg-black/50 px-6"><View className="bg-white dark:bg-slate-800 p-6 rounded-3xl">
-          <Text className="text-xl font-bold mb-4 dark:text-white">Yeni Kanal Aç</Text>
-          <TextInput placeholder="Kanal Adı" value={name} onChangeText={setName} className="bg-slate-100 p-3 rounded-xl mb-3" />
-          <TextInput placeholder="Açıklama" value={desc} onChangeText={setDesc} className="bg-slate-100 p-3 rounded-xl mb-4" />
-          <Pressable onPress={createChannel} className="bg-primary-600 p-4 rounded-xl items-center">{loading ? <ActivityIndicator color="#fff" /> : <Text className="text-white font-bold">Oluştur</Text>}</Pressable>
-          <Pressable onPress={() => setModal(false)} className="mt-4 items-center"><Text className="text-slate-500">İptal</Text></Pressable>
+      <Modal visible={modal} animationType="fade" transparent> 
+        <View className="flex-1 justify-center bg-black/40 px-6"><View className="bg-white p-6 rounded-[32px] shadow-2xl">
+          <Text className="text-2xl font-extrabold mb-4 text-slate-900">Yeni Kanal Aç</Text>
+          <TextInput placeholder="Kanal Adı" value={name} onChangeText={setName} className="bg-slate-50 border border-slate-200 p-4 rounded-2xl mb-3" />
+          <TextInput placeholder="Açıklama" value={desc} onChangeText={setDesc} className="bg-slate-50 border border-slate-200 p-4 rounded-2xl mb-6" />
+          <Pressable onPress={createChannel} className="bg-primary-600 p-4 rounded-2xl items-center shadow-lg shadow-primary-200">{loading ? <ActivityIndicator color="#fff" /> : <Text className="text-white font-bold text-lg">Oluştur</Text>}</Pressable>
+          <Pressable onPress={() => setModal(false)} className="mt-4 items-center"><Text className="text-slate-500 font-bold">İptal</Text></Pressable>
         </View></View>
       </Modal>
     </SafeAreaView>
