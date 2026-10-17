@@ -1,3 +1,4 @@
+import "../global.css";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
@@ -7,7 +8,6 @@ import { View, ActivityIndicator } from "react-native";
 
 export default function RootLayout() {
   const { loading } = useAuth();
-
   if (loading) {
     return (
       <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
@@ -15,7 +15,6 @@ export default function RootLayout() {
       </View>
     );
   }
-
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaProvider>
