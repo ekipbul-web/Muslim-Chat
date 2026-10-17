@@ -1,0 +1,30 @@
+{
+  "expo": {
+    "name": "MuslimChat",
+    "slug": "muslimchat",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "scheme": "muslimchat",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "app.muslimchat"
+    },
+    "android": {
+      "package": "app.muslimchat"
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "static"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-status-bar"
+    ],
+    "experiments": {
+      "typedRoutes": true,
+      "baseUrl": ""
+    }
+  }
+}
