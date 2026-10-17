@@ -4,26 +4,18 @@ import { StatusBar } from "expo-status-bar";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { useAuth } from "@/hooks/useAuth";
-import { View, ActivityIndicator } from "react-native";
+import { View, ActivityIndicator, useColorScheme } from "react-native";
 
 export default function RootLayout() {
   const { loading } = useAuth();
-  if (loading) {
-    return (
-      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-        <ActivityIndicator size="large" color="#0F766E" />
-      </View>
-    );
-  }
+  const colorScheme = useColorScheme();
+  if (loading) return (<View className="flex-1 items-center justify-center bg-white dark:bg-slate-900"><ActivityIndicator size="large" color="#0F766E" /></View>);
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaProvider>
-        <StatusBar style="auto" />
-        <Stack screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="index" />
-          <Stack.Screen name="(auth)" />
-          <Stack.Screen name="(tabs)" />
-          <Stack.Screen name="chat/[id]" />
+        <StatusBar style={colorScheme === "dark" ? "light" : "dark"} />
+        <Stack screenOptions={{ headerShown: false, animation: "slide_from_right", contentStyle: { backgroundColor: colorScheme === "dark" ? "#0F172A" : "#F8FAFC" } }}>
+          <Stack.Screen name="index" /><Stack.Screen name="(auth)" /><Stack.Screen name="(tabs)" /><Stack.Screen name="chat/[id]" />
         </Stack>
       </SafeAreaProvider>
     </GestureHandlerRootView>
