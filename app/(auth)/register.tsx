@@ -15,13 +15,9 @@ export default function Register() {
 
   const handleRegister = async () => {
     setLoading(true); setError("");
-    const { data, error: signUpError } = await supabase.auth.signUp({ email, password });
-    if (signUpError || !data.user) {
-      setError(signUpError?.message ?? "Kayıt başarısız"); setLoading(false); return;
-    }
-    const { error: profileError } = await supabase.from("profiles").insert({ id: data.user.id, username, full_name: fullName });
+    const { error: signUpError } = await supabase.auth.signUp({ email, password, options: { data: { username, full_name: fullName } } });
     setLoading(false);
-    if (profileError) setError(profileError.message);
+    if (signUpError) setError(signUpError.message);
     else router.replace("/(tabs)/chats");
   };
 
