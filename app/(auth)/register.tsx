@@ -1,10 +1,9 @@
 import { useState } from "react";
-import { View, Text, KeyboardAvoidingView, Platform, ScrollView } from "react-native";
+import { View, Text, KeyboardAvoidingView, Platform, ScrollView, TextInput, Pressable, ActivityIndicator } from "react-native";
 import { Link, router } from "expo-router";
 import Animated, { FadeInDown } from "react-native-reanimated";
 import { supabase } from "@/lib/supabase";
-import { Button } from "@/components/Button";
-import { Input } from "@/components/Input";
+import { User, Mail, Lock, UserPlus } from "lucide-react-native";
 
 export default function Register() {
   const [email, setEmail] = useState("");
@@ -15,78 +14,70 @@ export default function Register() {
   const [error, setError] = useState("");
 
   const handleRegister = async () => {
-    setLoading(true);
-    setError("");
-    const { data, error: signUpError } = await supabase.auth.signUp({
-      email,
-      password,
-    });
+    setLoading(true); setError("");
+    const { data, error: signUpError } = await supabase.auth.signUp({ email, password });
     if (signUpError || !data.user) {
-      setError(signUpError?.message ?? "Kayıt başarısız");
-      setLoading(false);
-      return;
+      setError(signUpError?.message ?? "Kayıt başarısız"); setLoading(false); return;
     }
-
-    const { error: profileError } = await supabase.from("profiles").insert({
-      id: data.user.id,
-      username,
-      full_name: fullName,
-    });
-
+    const { error: profileError } = await supabase.from("profiles").insert({ id: data.user.id, username, full_name: fullName });
     setLoading(false);
     if (profileError) setError(profileError.message);
     else router.replace("/(tabs)/chats");
   };
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      className="flex-1 bg-white"
-    >
-      <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: "center" }}>
-        <View className="px-6 py-12">
-          <Animated.View entering={FadeInDown.duration(600)}>
-            <Text className="text-3xl font-bold text-slate-900 mb-2">
-              Kayıt Ol
-            </Text>
-            <Text className="text-slate-500 mb-8">
-              MuslimChat ailesine katıl
-            </Text>
-          </Animated.View>
+    <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} className="flex-1 bg-slate-50">
+      <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: "center" }} className="px-6 py-12">
+        <Animated.View entering={FadeInDown.duration(800)} className="mb-8">
+          <Text className="text-4xl font-extrabold text-slate-900 tracking-tight mb-2">Kayıt Ol</Text>
+          <Text className="text-base text-slate-500 font-medium">MuslimChat ailesine katıl</Text>
+        </Animated.View>
 
-          <Animated.View entering={FadeInDown.delay(200).duration(600)}>
-            <Input label="Kullanıcı Adı" value={username} onChangeText={setUsername} />
-            <Input label="Ad Soyad" value={fullName} onChangeText={setFullName} />
-            <Input
-              label="E-posta"
-              value={email}
-              onChangeText={setEmail}
-              keyboardType="email-address"
-              autoCapitalize="none"
-            />
-            <Input
-              label="Şifre"
-              value={password}
-              onChangeText={setPassword}
-              secureTextEntry
-            />
-            {error ? (
-              <Text className="text-red-500 mb-4">{error}</Text>
-            ) : null}
-            <Button
-              label="Kayıt Ol"
-              onPress={handleRegister}
-              loading={loading}
-              fullWidth
-            />
-          </Animated.View>
+        <Animated.View entering={FadeInDown.delay(200).duration(800)} className="bg-white p-6 rounded-3xl shadow-xl shadow-slate-200 border border-slate-100">
+          {error ? <Text className="text-red-500 text-center mb-4 bg-red-50 p-3 rounded-xl">{error}</Text> : null}
 
-          <Link href="/(auth)/login" asChild>
-            <Text className="text-center text-primary-700 mt-6">
-              Zaten hesabın var mı? <Text className="font-bold">Giriş yap</Text>
-            </Text>
-          </Link>
-        </View>
+          <View className="mb-4">
+            <Text className="text-slate-700 font-bold mb-2 ml-1">Kullanıcı Adı</Text>
+            <View className="flex-row items-center bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3">
+              <User color="#94A3B8" size={20} />
+              <TextInput value={username} onChangeText={setUsername} placeholder="kullanici_adi" className="flex-1 ml-3 text-slate-900" autoCapitalize="none" />
+            </View>
+          </View>
+
+          <View className="mb-4">
+            <Text className="text-slate-700 font-bold mb-2 ml-1">Ad Soyad</Text>
+            <View className="flex-row items-center bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3">
+              <User color="#94A3B8" size={20} />
+              <TextInput value={fullName} onChangeText={setFullName} placeholder="Adınız Soyadınız" className="flex-1 ml-3 text-slate-900" />
+            </View>
+          </View>
+
+          <View className="mb-4">
+            <Text className="text-slate-700 font-bold mb-2 ml-1">E-posta</Text>
+            <View className="flex-row items-center bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3">
+              <Mail color="#94A3B8" size={20} />
+              <TextInput value={email} onChangeText={setEmail} placeholder="ornek@email.com" className="flex-1 ml-3 text-slate-900" keyboardType="email-address" autoCapitalize="none" />
+            </View>
+          </View>
+
+          <View className="mb-6">
+            <Text className="text-slate-700 font-bold mb-2 ml-1">Şifre</Text>
+            <View className="flex-row items-center bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3">
+              <Lock color="#94A3B8" size={20} />
+              <TextInput value={password} onChangeText={setPassword} placeholder="••••••••" className="flex-1 ml-3 text-slate-900" secureTextEntry />
+            </View>
+          </View>
+
+          <Pressable onPress={handleRegister} disabled={loading} className="bg-primary-600 rounded-2xl py-4 flex-row justify-center items-center shadow-lg shadow-primary-200">
+            {loading ? <ActivityIndicator color="#fff" /> : <><UserPlus color="#fff" size={20} /><Text className="text-white font-bold text-lg ml-2">Kayıt Ol</Text></>}
+          </Pressable>
+        </Animated.View>
+
+        <Link href="/(auth)/login" asChild>
+          <Pressable className="mt-8 items-center">
+            <Text className="text-slate-500 text-base">Zaten hesabın var mı? <Text className="text-primary-600 font-bold">Giriş Yap</Text></Text>
+          </Pressable>
+        </Link>
       </ScrollView>
     </KeyboardAvoidingView>
   );
