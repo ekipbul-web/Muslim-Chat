@@ -26,15 +26,17 @@ export const useAuthStore = create<AuthState>((set) => ({
   loading: true,
   setProfile: (p) => set({ profile: p, loading: false }),
   refresh: async () => {
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    const { data: { user } } = await supabase.auth.getUser();
     if (!user) return set({ profile: null, loading: false });
-    const { data } = await supabase
-      .from("profiles")
-      .select("*")
-      .eq("id", user.id)
-      .single();
+    
+    // Profili veritabanından en güncel haliyle çek
+    const { data, error } = await supabase.from("profiles").select("*").eq("id", user.id).single();
+    
+    if (error) {
+      console.error("Profil çekilemedi:", error);
+      return set({ loading: false });
+    }
+    
     set({ profile: data as Profile, loading: false });
   },
   signOut: async () => {
